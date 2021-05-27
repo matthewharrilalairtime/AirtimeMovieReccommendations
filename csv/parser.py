@@ -4,7 +4,7 @@ import csv
 
 
 rows = []
-with open('raw_hackathon.csv', newline='') as csvfile:
+with open('raw_hackathon_cleaned_w_id.csv', newline='') as csvfile:
   spamreader = csv.reader(csvfile)
   for row in spamreader:
     # print(', '.join(row))
@@ -21,9 +21,11 @@ print(rows[0])
 print('-------------')
 print(rows[1])
 
+'''
 user_ids = {}
 
 mint_id = 0
+
 
 for ct, row in enumerate(rows):
     user_id = row[1]
@@ -46,9 +48,18 @@ print(user_ids)
 for row in rows:
     user_id = row[1]
     row.append(user_ids[user_id])
+'''
+
+cleaned_rows = []
+
+for ct, row in enumerate(rows):
+    content_type = row[3]
+    print(content_type)
+    if content_type == 'movies':
+        cleaned_rows.append(row)
 
 # name of csv file 
-filename = "raw_hackathon_cleaned.csv"
+filename = "movies_cleaned.csv"
     
 # writing to csv file 
 with open(filename, 'w') as csvfile: 
@@ -59,4 +70,4 @@ with open(filename, 'w') as csvfile:
     # csvwriter.writerow(fields) 
         
     # writing the data rows 
-    csvwriter.writerows(rows)
+    csvwriter.writerows(cleaned_rows)
