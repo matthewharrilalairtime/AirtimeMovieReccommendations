@@ -4,7 +4,7 @@ import csv
 
 
 rows = []
-with open('raw_hackathon_cleaned_w_id.csv', newline='') as csvfile:
+with open('youtube_cleaned.csv', newline='') as csvfile:
   spamreader = csv.reader(csvfile)
   for row in spamreader:
     # print(', '.join(row))
@@ -21,45 +21,37 @@ print(rows[0])
 print('-------------')
 print(rows[1])
 
-'''
-user_ids = {}
+
+content_ids = {}
 
 mint_id = 0
 
 
 for ct, row in enumerate(rows):
-    user_id = row[1]
-    user_ids
+    content_id = row[4]
     print(ct, row)
-    print(user_id)
-    if user_id in user_ids.keys():
+    print(content_id)
+
+    if content_id in content_ids.keys():
         print('already exists with value: ')
-        print(user_ids[user_id]) 
+        print(content_ids[content_id]) 
     else:
-        print('giving user:' + user_id + ' new id: ' + str(mint_id))
-        user_ids[user_id] = mint_id
+        print('giving content:' + content_id + ' new id: ' + str(mint_id))
+        content_ids[content_id] = mint_id
         mint_id += 1
+
     #if row[2] != 'movies' and row[2] != 'youtube':
     #    print('delete this row its bad ^^^')
     #    rows.pop(ct)
 
-print(user_ids)
+print(content_ids)
 
 for row in rows:
-    user_id = row[1]
-    row.append(user_ids[user_id])
-'''
-
-cleaned_rows = []
-
-for ct, row in enumerate(rows):
-    content_type = row[3]
-    print(content_type)
-    if content_type == 'movies':
-        cleaned_rows.append(row)
+    content_id = row[4]
+    row.append(content_ids[content_id])
 
 # name of csv file 
-filename = "movies_cleaned.csv"
+filename = "youtube_cleaned_w_id.csv"
     
 # writing to csv file 
 with open(filename, 'w') as csvfile: 
@@ -70,4 +62,4 @@ with open(filename, 'w') as csvfile:
     # csvwriter.writerow(fields) 
         
     # writing the data rows 
-    csvwriter.writerows(cleaned_rows)
+    csvwriter.writerows(rows)
