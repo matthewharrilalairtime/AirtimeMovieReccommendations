@@ -2,7 +2,6 @@ import csv
 
 #ts,user_id,channel,media_url,duration
 
-
 rows = []
 with open('youtube_cleaned.csv', newline='') as csvfile:
   spamreader = csv.reader(csvfile)
@@ -25,7 +24,6 @@ print(rows[1])
 content_ids = {}
 
 mint_id = 0
-
 
 for ct, row in enumerate(rows):
     content_id = row[4]
