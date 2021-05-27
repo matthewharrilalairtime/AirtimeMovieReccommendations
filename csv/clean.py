@@ -1,7 +1,7 @@
 import csv
 
 rows = []
-with open('raw_hackathon.csv', newline='') as csvfile:
+with open('raw_cleaned_hackathon.csv', newline='') as csvfile:
   spamreader = csv.reader(csvfile)
   for row in spamreader:
     rows.append(row)
@@ -34,17 +34,18 @@ for row in rows:
         error = True
     # if not content_idx:
     #     error = True
-    if not duration:
+    if not int(duration):
         error = True
 
     if error:
         print('dirty data!!!')
         print(row)
     else:
-        cleaned_rows.append(row)
+        if content == 'movies':
+            cleaned_rows.append(row)
 
 # name of csv file 
-filename = "raw_cleaned_hackathon.csv"
+filename = "movies222_raw_cleaned_hackathon.csv"
 
 # writing to csv file 
 with open(filename, 'w') as csvfile: 

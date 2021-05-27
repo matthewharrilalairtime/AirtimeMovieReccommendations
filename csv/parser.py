@@ -3,30 +3,18 @@ import csv
 #ts,user_id,channel,media_url,duration
 
 rows = []
-with open('youtube_cleaned.csv', newline='') as csvfile:
+with open('raw_cleaned_hackathon.csv', newline='') as csvfile:
   spamreader = csv.reader(csvfile)
   for row in spamreader:
     # print(', '.join(row))
     rows.append(row)
-
-print('-------------')
-
-for row in rows:
-    print(row)
-print('-------------')
-
-print(rows[0])
-
-print('-------------')
-print(rows[1])
-
 
 content_ids = {}
 
 mint_id = 0
 
 for ct, row in enumerate(rows):
-    content_id = row[4]
+    content_id = row[1]
     print(ct, row)
     print(content_id)
 
@@ -44,12 +32,13 @@ for ct, row in enumerate(rows):
 
 print(content_ids)
 
+
 for row in rows:
-    content_id = row[4]
+    content_id = row[1]
     row.append(content_ids[content_id])
 
 # name of csv file 
-filename = "youtube_cleaned_w_id.csv"
+filename = "raw_cleaned_w_id.csv"
     
 # writing to csv file 
 with open(filename, 'w') as csvfile: 
@@ -61,3 +50,4 @@ with open(filename, 'w') as csvfile:
         
     # writing the data rows 
     csvwriter.writerows(rows)
+
