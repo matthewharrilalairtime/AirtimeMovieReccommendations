@@ -3,7 +3,7 @@ import csv
 #ts,user_id,channel,media_url,duration
 
 rows = []
-with open('raw_cleaned_hackathon.csv', newline='') as csvfile:
+with open('youtube222_raw_cleaned_hackathon.csv', newline='') as csvfile:
   spamreader = csv.reader(csvfile)
   for row in spamreader:
     # print(', '.join(row))
@@ -38,7 +38,7 @@ for row in rows:
     row.append(content_ids[content_id])
 
 # name of csv file 
-filename = "raw_cleaned_w_id.csv"
+filename = "youtube_raw_cleaned.csv"
     
 # writing to csv file 
 with open(filename, 'w') as csvfile: 
