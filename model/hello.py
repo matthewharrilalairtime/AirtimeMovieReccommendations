@@ -6,39 +6,49 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-meta_path = '/Users/addisonpolcyn/Downloads/movies_metadata.csv'
-ratings_path = '/Users/addisonpolcyn/Downloads/ratings_small.csv'    
+path = '/Users/addisonpolcyn/airtime/tools/hackathon/AirtimeMovieReccommendations/csv/youtube_reduced_indexed_minimized.csv'
 
-meta = {}
-with open(meta_path, newline='') as csvfile:
-  csv_reader = csv.reader(csvfile, quotechar='"', delimiter=',',
-                          quoting=csv.QUOTE_ALL, skipinitialspace=True)
-  for row in csv_reader:
-    id = row[5]
-    name = row[8]
-    meta[id] = name
-
-# loading csv file into pandas dataframe
 # read ratings file
+user_youtube_duration_csv = pd.read_csv(path)
 
-for key, value in meta.items():
-    print(key)
-    print(value)
+print(user_youtube_duration_csv.head())
+print(user_youtube_duration_csv.info())
 
-ratings = pd.read_csv(ratings_path)
-
-print(ratings.head())
 
 from sklearn.model_selection import train_test_split
 
-X_train, X_test = train_test_split(ratings, test_size = 0.40, random_state = 42)
+user_youtube_duration_csv.columns = user_youtube_duration_csv.columns.str.strip()
+X_train, X_test = train_test_split(user_youtube_duration_csv, test_size = 0.30, random_state = 42)
 
 print(X_train.shape)
+print(X_test.shape)
+
 
 # pivot ratings into movie features
-user_data = X_train.pivot(index = 'userId', columns = 'movieId', values = 'rating').fillna(0)
+user_data = X_train.pivot(index = "userIdx", columns = "youtube", values = 'duration').fillna(0)
 print(user_data.head())
 
 
+# make a copy of train and test datasets
+dummy_train = X_train.copy()
+dummy_test = X_test.copy()
 
+dummy_train['duration'] = dummy_train['duration'].apply(lambda x: 0 if x > 0 else 1)
+dummy_test['duration'] = dummy_test['duration'].apply(lambda x: 1 if x > 0 else 0)
 
+# The movies not rated by user is marked as 1 for prediction 
+dummy_train = dummy_train.pivot(index = "userIdx", columns = "youtube", values = 'duration').fillna(1)
+
+# The movies not rated by user is marked as 0 for evaluation 
+dummy_test = dummy_test.pivot(index = "userIdx", columns = "youtube", values = 'duration').fillna(0)
+
+print(dummy_train.head())
+print(dummy_test.head())
+
+from sklearn.metrics.pairwise import cosine_similarity
+
+# User Similarity Matrix using Cosine similarity as a similarity measure between Users
+user_similarity = cosine_similarity(user_youtube_duration_csv)
+user_similarity[np.isnan(user_similarity)] = 0
+print(user_similarity)
+print(user_similarity.shape)
