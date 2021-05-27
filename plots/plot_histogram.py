@@ -1,7 +1,7 @@
 import csv
 
 rows = []
-with open('cleaned_complete_youtube_data.csv', newline='') as csvfile:
+with open('/Users/addisonpolcyn/airtime/tools/hackathon/AirtimeMovieReccommendations/csv/youtube_reduced.csv', newline='') as csvfile:
   spamreader = csv.reader(csvfile)
   for row in spamreader:
     rows.append(row)
@@ -41,11 +41,11 @@ import matplotlib.pyplot as plt
 print('user values')
 print(user_values)
 
-# plt.hist(user_values, bins = 100)
-# plt.show()
+plt.hist(user_values, bins = 100)
+plt.show()
 
 print('content values')
 print(content_values)
 
-plt.hist(content_values, bins = 1000)
+plt.hist(content_values, bins = 100)
 plt.show()
