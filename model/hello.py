@@ -14,7 +14,6 @@ user_youtube_duration_csv = pd.read_csv(path)
 print(user_youtube_duration_csv.head())
 print(user_youtube_duration_csv.info())
 
-
 from sklearn.model_selection import train_test_split
 
 user_youtube_duration_csv.columns = user_youtube_duration_csv.columns.str.strip()
@@ -66,6 +65,59 @@ print(user_predicted_ratings.shape)
 # user_final_ratings = np.multiply(user_predicted_ratings, 1)
 print(user_predicted_ratings)
 # user_final_ratings.iloc[0].sort_values(ascending = False)
+
+def calculate_predictions_and_similarities(user_youtube_duration_csv, index_name='userIdx', columns_name='youtube', values='duration'):
+  from sklearn.model_selection import train_test_split
+
+  user_youtube_duration_csv.columns = user_youtube_duration_csv.columns.str.strip()
+  X_train, X_test = train_test_split(user_youtube_duration_csv, test_size = 0.30, random_state = 42)
+
+  print(X_train.shape)
+  print(X_test.shape)
+
+  # pivot ratings into movie features
+  user_data = user_youtube_duration_csv.pivot(index=index_name, columns=columns_name, values=values).fillna(0)
+  print('this shape')
+  print(user_data.shape)
+  print(user_data.head())
+
+  # make a copy of train and test datasets
+  dummy_train = X_train.copy()
+  dummy_test = X_test.copy()
+
+  dummy_train[values] = dummy_train[values].apply(lambda x: 0 if x > 0 else 1)
+  dummy_test[values] = dummy_test[values].apply(lambda x: 1 if x > 0 else 0)
+
+  # The movies not rated by user is marked as 1 for prediction 
+  dummy_train = dummy_train.pivot(index=index_name, columns=columns_name, values=values).fillna(1)
+
+  # The movies not rated by user is marked as 0 for evaluation 
+  dummy_test = dummy_test.pivot(index=index_name, columns=columns_name, values=values).fillna(0)
+
+  print(dummy_train.head())
+  print(dummy_test.head())
+
+  from sklearn.metrics.pairwise import cosine_similarity
+
+  # User Similarity Matrix using Cosine similarity as a similarity measure between Users
+  user_similarity = cosine_similarity(user_data)
+  user_similarity[np.isnan(user_similarity)] = 0
+  print(user_similarity)
+  print(user_similarity.shape)
+
+  user_predicted_ratings = np.dot(user_similarity, user_data)
+  # user_predicted_ratings
+
+  print(user_predicted_ratings.shape)
+
+  # np.multiply for cell-by-cell multiplication 
+
+  # user_final_ratings = np.multiply(user_predicted_ratings, dummy_train)
+  # user_final_ratings.head()
+  # user_final_ratings = np.multiply(user_predicted_ratings, 1)
+  print(user_predicted_ratings)
+  # user_final_ratings.iloc[0].sort_values(ascending = False)
+  return user_predicted_ratings, user_similarity
 
 # normalize predictions results per user
 # calculates users average duration and predicted average duration
@@ -140,6 +192,8 @@ def write_json_model(user_similarity, user_predicted_ratings):
   with open('model_results.json', 'w', encoding='utf-8') as f:
       json.dump(final_results, f, ensure_ascii=False)
 
+print('calculating model results -----')
+user_predicted_ratings, user_similarity = calculate_predictions_and_similarities(user_youtube_duration_csv)
 
 print('before normalization ------------')
 print(user_predicted_ratings)

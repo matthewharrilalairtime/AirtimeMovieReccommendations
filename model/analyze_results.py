@@ -8,9 +8,9 @@ with open('model_results.json') as f:
 # Output: {'name': 'Bob', 'languages': ['English', 'Fench']}
 # print(data)
 
-id = "4"
-sim = data[id]["user_similarity"]
-youtube = data[id]["duration_predictions"]
+# id = "4"
+# sim = data[id]["user_similarity"]
+# youtube = data[id]["duration_predictions"]
 
 def get_user_results(id):
     sim = data[id]["user_similarity"]
