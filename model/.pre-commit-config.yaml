@@ -1,0 +1,35 @@
+repos:
+  - repo: local
+    hooks:
+      - id: isort
+        name: isort
+        stages: [commit]
+        language: system
+        entry: "pipenv run isort"
+        types: [python]
+        require_serial: true
+        
+      - id: autopep8
+        name: autopep8
+        stages: [commit]
+        language: system
+        entry: "pipenv run autopep8"
+        types: [python]
+        require_serial: true
+        args: ["--in-place"]
+        
+      - id: black
+        name: black
+        stages: [commit]
+        language: system
+        entry: "pipenv run black"
+        types: [python]
+        require_serial: true        
+
+      - id: flake8
+        name: flake8
+        stages: [commit]
+        language: system
+        entry: pipenv run flake8
+        types: [python]
+        require_serial: true 
