@@ -34,7 +34,7 @@ class HomeViewController: UIViewController {
         let stream = InputStream(fileAtPath: "/Users/matthewharrilal/AirtimeMovieReccommendations/csv/youtube_reduced_indexed.csv")!
         let csv = try! CSVReader(stream: stream)
 
-        let outputStream = OutputStream(toFileAtPath: "/Users/matthewharrilal/AirtimeMovieReccommendations/csv/youtube_reduced_indexed.csv", append: false)!
+        let outputStream = OutputStream(toFileAtPath: "/Users/matthewharrilal/AirtimeMovieReccommendations/csv/youtube_reduced_indexed_with_duration.csv", append: false)!
         let outputCSV = try! CSVWriter(stream: outputStream)
 
         while let row = csv.next() {
