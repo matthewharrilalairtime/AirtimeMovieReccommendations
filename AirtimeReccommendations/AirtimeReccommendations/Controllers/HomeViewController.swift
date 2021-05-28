@@ -38,6 +38,10 @@ class HomeViewController: UIViewController {
         let outputCSV = try! CSVWriter(stream: outputStream)
 
         while let row = csv.next() {
+            if row.count < 4 {
+                continue
+            }
+
             let youtubeVideoId = row[3].components(separatedBy: "=")
             if youtubeVideoId.count == 1 {
                 continue
@@ -52,7 +56,7 @@ class HomeViewController: UIViewController {
             let split = video.items[0].contentDetails.duration.components(separatedBy: "M")
             let minutes = split[0][split.count]
             let seconds = split[1][0]
-            let duration = Int(row[4])! / ((minutes.wholeNumberValue! * 60) + seconds.wholeNumberValue!)
+            let duration = Int(row[4]) ?? 600 / ((minutes.wholeNumberValue! * 60) + seconds.wholeNumberValue!)
             try! outputCSV.write(row: [row[0], row[1], row[2], row[3], row[4], String(duration)])
         }
 
