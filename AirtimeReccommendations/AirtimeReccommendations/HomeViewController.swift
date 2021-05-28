@@ -24,6 +24,10 @@ class HomeViewController: UIViewController {
 
         let stream = InputStream(fileAtPath: "/Users/matthewharrilal/AirtimeMovieReccommendations/csv/youtube_reduced_indexed.csv")!
         let csv = try! CSVReader(stream: stream)
+
+        let outputStream = OutputStream(toFileAtPath: "/Users/matthewharrilal/AirtimeMovieReccommendations/csv/youtube_reduced_indexed.csv", append: false)!
+        let outputCSV = try! CSVWriter(stream: outputStream)
+
         while let row = csv.next() {
             let youtubeVideoId = row[3].components(separatedBy: "=")
             if youtubeVideoId.count == 1 {
@@ -33,19 +37,14 @@ class HomeViewController: UIViewController {
             videoIds.append(youtubeVideoId[1])
             count += 1
 
-            let stream = OutputStream(toFileAtPath: "/Users/matthewharrilal/AirtimeMovieReccommendations/csv/youtube_reduced_indexed.csv", append: false)!
-            let csv = try! CSVWriter(stream: stream)
 
-            csv.beginNewRow()
-            try! csv.write(field: youtubeVideoId[1])
-            csv.stream.close()
-
-            if count > 100 {
-                break
-            }
+            outputCSV.beginNewRow()
+            try! outputCSV.write(row: [row[0], row[1], row[2], row[3], row[4], youtubeVideoId[1]])
         }
 
         print(videoIds, count)
+        outputCSV.stream.close()
+
     }
 }
 
