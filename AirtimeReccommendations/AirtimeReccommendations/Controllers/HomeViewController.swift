@@ -53,11 +53,19 @@ class HomeViewController: UIViewController {
 
             outputCSV.beginNewRow()
 
-            let split = video.items[0].contentDetails.duration.components(separatedBy: "M")
-            let minutes = split[0][split.count]
-            let seconds = split[1][0]
-            let duration = Int(row[4]) ?? 600 / ((minutes.wholeNumberValue! * 60) + seconds.wholeNumberValue!)
-            try! outputCSV.write(row: [row[0], row[1], row[2], row[3], row[4], String(duration)])
+            if video.items[0].contentDetails.duration.contains("M") {
+                let split = video.items[0].contentDetails.duration.components(separatedBy: "M")
+                let minutes = split[0][split.count]
+                let seconds = split[1][0]
+                let duration = Int(row[4]) ?? 600 / ((minutes.wholeNumberValue! * 60) + seconds.wholeNumberValue!)
+                try! outputCSV.write(row: [row[0], row[1], row[2], row[3], row[4], String(duration)])
+            } else {
+                let split = video.items[0].contentDetails.duration.components(separatedBy: "T")
+                let seconds = split[1].replacingOccurrences(of: "S", with: "")
+                let duration = Int(row[4]) ?? 600 / (Int(seconds) ?? 50)
+                try! outputCSV.write(row: [row[0], row[1], row[2], row[3], row[4], String(duration)])
+            }
+
         }
 
         print(videoIds, count)
