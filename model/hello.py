@@ -147,6 +147,8 @@ user_predicted_ratings = normalize_predictions_per_user(user_predicted_ratings, 
 
 print('after ============')
 print(user_predicted_ratings)
-#write_json_model(user_similarity, user_predicted_ratings)
+
+print('WRITING JSON RESULTS =============')
+write_json_model(user_similarity, user_predicted_ratings)
 
 

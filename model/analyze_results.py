@@ -1,5 +1,7 @@
 import json
 
+print('LOADING JSON FILE ===========')
+
 with open('model_results.json') as f:
   data = json.load(f)
 
@@ -27,5 +29,9 @@ def get_user_results(id):
     get_top_n(youtube)
     print()
 
-get_user_results("4")
-get_user_results("295")
+# get_user_results("4")
+# get_user_results("295")
+
+while True:
+    idx = input("Enter user_id index to read: ")
+    get_user_results(idx)
