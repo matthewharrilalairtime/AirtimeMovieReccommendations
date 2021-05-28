@@ -69,9 +69,33 @@ print(user_predicted_ratings)
 
 # normalize predictions results per user
 # calculates users average duration and predicted average duration
-# 
-def normalize_predictions_per_user(user_predicted_ratings, user_date):
-  return 
+# real_avg / pred_avg * pred_score
+def normalize_predictions_per_user(user_predicted_ratings, user_data):
+  print('userdata')
+  print(user_data)
+  print('userdata row')
+
+  for i in range(len(user_data)):
+    def calculate_row_avg(row):
+      def count_non_zero_entries(row):
+        count = 0
+        for column in row:
+          if column > 0:
+            count += 1
+        return count
+      non_zero_entries = count_non_zero_entries(row)
+      row_sum = row.sum()
+      row_avg = row_sum / non_zero_entries
+      return row_avg
+
+    real_row_avg = calculate_row_avg(user_data.iloc[i])
+    pred_row_avg = calculate_row_avg(user_predicted_ratings[i])
+    # print('row-avg')
+    # print(real_row_avg)
+    # print('pred-row-avg')
+    # print(pred_row_avg)
+    user_predicted_ratings[i] = user_predicted_ratings[i] * (real_row_avg / pred_row_avg)
+  return user_predicted_ratings
 
 def write_json_model(user_similarity, user_predicted_ratings):
   import csv
@@ -117,7 +141,12 @@ def write_json_model(user_similarity, user_predicted_ratings):
       json.dump(final_results, f, ensure_ascii=False)
 
 
+print('before normalization ------------')
+print(user_predicted_ratings)
 user_predicted_ratings = normalize_predictions_per_user(user_predicted_ratings, user_data)
+
+print('after ============')
+print(user_predicted_ratings)
 #write_json_model(user_similarity, user_predicted_ratings)
 
 
